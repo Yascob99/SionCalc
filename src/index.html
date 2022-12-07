@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sion Damage Calculator</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link href="https://cdn.jsdelivr.net/css-toggle-switch/latest/toggle-switch.css" rel="stylesheet" />
+    <style>body {
+      background: url(https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Sion_22.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+      color: white;
+      text-shadow: 0 0 5px red,0 0 10px red,0 0 15px red,0 0 20px #228dff,0 0 35px #228dff,0 0 40px #228dff;
+    }
+    input[type=number] {
+      width: 4em;
+    }
+
+    #Qdamage{
+      left: 0;
+      line-height: 200px;
+      margin-top: -100px;
+      position: absolute;
+      text-align: center;
+      top: 50%;
+      width: 100%;
+      color: red;
+      font-size: 300px;
+      z-index: -1;
+      text-shadow: 0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px #228dff,0 0 35px #228dff,0 0 40px #228dff;
+    }
+    .switch-toggle {
+        width: 10em;
+    }
+    .switch-toggle label:not(.disabled) {
+        cursor: pointer;
+    }
+    input[type="radio"] {
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    }
+    </style>
+    <script src="./renderer.js"></script>
+</head>
+<body>
+  <form>
+  <div>
+      <img  id="Toggle" value="0" onclick="chngimg(); recalculate();" src="assets/Champion.svg" style="width:100px;"/>
+</div>
+<div>
+  <label for="Level">Level</label><br>
+  <input type="range"
+        value="1" min="1" max="18" oninput="this.nextElementSibling.value = this.value; recalculate()">
+  <input type="number" id="Level" name="Level"
+        value ="1" min="1" max="18" oninput="this.previousElementSibling.value = this.value;" onchange="recalculate()">
+</div>
+<div>
+  <label for="QLevel">Q Level</label><br>
+<input type="range"
+      value="1" min="1" max="5" oninput="this.nextElementSibling.value = this.value; recalculate()">
+      <input type="number" id="QLevel" name="QLevel"
+            value ="1" min="1" max="5" oninput="this.previousElementSibling.value = this.value;" onchange="recalculate()">
+
+</div>
+<div>
+<label for="QCharge">Q Charge Time</label><br>
+<input type="range"
+       value="0" min="0" max="2" step="0.25" oninput="this.nextElementSibling.value = this.value; recalculate()">
+       <input type="number" id="QCharge" name="QCharge"
+             value="0" min="0" max="2" step="0.25" oninput="this.previousElementSibling.value = this.value;" onchange="recalculate()">
+</div>
+<div>
+  <label for="bonusAD">Bonus AD</label><br>
+  <input type="range"
+        value="0" min="0" max="500" oninput="this.nextElementSibling.value = this.value; recalculate()">
+  <input type="number" id="bonusAD" name="bonusAD"
+        value="0" min="0" max="500" oninput="this.previousElementSibling.value = this.value;" onchange="recalculate()">
+</div>
+<div>
+  <label for="armorReduction">Flat Armor Reduction</label><br>
+  <input type="range"
+        value="0" min="0" max="100" oninput="this.nextElementSibling.value = this.value; recalculate()">
+        <input type="number" id="armorReduction" name="armorReduction"
+              value="0" min="0" max="100" oninput="this.previousElementSibling.value = this.value;" onchange="recalculate()">
+</div>
+<div>
+  <label for="percentArmorReduction">Percent Armor Reduction</label><br>
+  <input type="range"
+        value="0" min="0" max="100" oninput="this.nextElementSibling.value = this.value; recalculate()">
+        <input type="number" id="percentArmorReduction" name="percentArmorReduction"
+              value="0" min="0" max="100" oninput="this.previousElementSibling.value = this.value;" onchange="recalculate()">
+</div>
+<div>
+  <label for="percentArmorPen">Percent Armor Pen </label><br>
+  <input type="range"
+        value="0" min="0" max="100" oninput="this.nextElementSibling.value = this.value; recalculate()">
+        <input type="number" id="percentArmorPen" name="percentArmorPen"
+              value="0" min="0" max="100" oninput="this.previousElementSibling.value = this.value;" onchange="recalculate()">
+</div>
+<div>
+  <label for="lethality">Lethality</label><br>
+  <input type="range"
+         value="0" min="0" max="120" oninput="this.nextElementSibling.value = this.value; recalculate()">
+         <input type="number" id="lethality" name="lethality"
+               value="0" min="0" max="120" oninput="this.previousElementSibling.value = this.value;" onchange="recalculate()">
+</div>
+<div>
+  <label for="enemyArmor">Enemy Base Armor</label><br>
+  <input type="range"
+        value="0" min="0" max="140" oninput="this.nextElementSibling.value = this.value; recalculate()">
+        <input type="number" id="enemyArmor" name="enemyArmor"
+              value="0" min="0" max="140" oninput="this.previousElementSibling.value = this.value;" onchange="recalculate()">
+</div>
+<div>
+  <label for="enemyArmor">Enemy Bonus Armor</label><br>
+  <input type="range"
+        value="0" min="0" max="1000" oninput="this.nextElementSibling.value = this.value; recalculate()">
+        <input type="number" id="enemyBonusArmor" name="enemyBonusArmor"
+              value="0" min="0" max="1000" oninput="this.previousElementSibling.value = this.value;" onchange="recalculate()">
+</div>
+<div><output id="Qdamage"></output></div>
+</form>
+</body>
+</html>
